@@ -20,6 +20,9 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
     #[ORM\Column(length: 20)]
     private ?string $status = null;
 
@@ -60,6 +63,18 @@ class Book
     public function setAuthor(string $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
