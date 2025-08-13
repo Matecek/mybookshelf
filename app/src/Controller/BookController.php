@@ -19,7 +19,7 @@ class BookController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        return $this->render('homepage/show.html.twig', [
+        return $this->render('homepage/index.html.twig', [
             'books' => $data,
         ]);
     }
