@@ -1,2 +1,7 @@
 @import "tailwindcss";
-Mon Aug 11 12:36:28 UTC 2025
+
+@layer base {
+    body {
+        @apply bg-gray-50 text-gray-800 leading-relaxed;
+    }
+}

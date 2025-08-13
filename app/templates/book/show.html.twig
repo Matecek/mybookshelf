@@ -3,39 +3,39 @@
 {% block title %}{{ book.title }} - szczegóły{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1 class="h4 mb-3">{{ book.title }}</h1>
+    <div class="max-w-3xl mx-auto mt-10 px-4">
+        <h1 class="text-2xl font-bold mb-6">{{ book.title }}</h1>
 
-        <div class="mb-3">
-            <strong>Autor:</strong> {{ book.author }}
+        <div class="mb-4">
+            <span class="font-semibold">Autor:</span> {{ book.author }}
         </div>
-        <div class="mb-3">
-            <strong>Opis:</strong>
-            <p>{{ book.description is not empty ? book.description : 'Brak opisu.' }}</p>
+        <div class="mb-4">
+            <span class="font-semibold">Opis:</span>
+            <p class="mt-1">{{ book.description is not empty ? book.description : 'Brak opisu.' }}</p>
         </div>
-        <div class="mb-3">
-            <strong>Status:</strong>
+        <div class="mb-4">
+            <span class="font-semibold">Status:</span>
             {% if book.status == 'planned' %}planowana
             {% elseif book.status == 'reading' %}czytana
             {% else %}przeczytana{% endif %}
         </div>
-        <div class="mb-3">
-            <strong>Ocena:</strong> {{ book.rating is not null ? book.rating ~ '/10' : '—' }}
+        <div class="mb-4">
+            <span class="font-semibold">Ocena:</span> {{ book.rating is not null ? book.rating ~ '/10' : '—' }}
         </div>
-        <div class="mb-3">
-            <strong>Dodano:</strong> {{ book.createdAt|date('Y-m-d H:i') }}
+        <div class="mb-4">
+            <span class="font-semibold">Dodano:</span> {{ book.createdAt|date('Y-m-d H:i') }}
         </div>
-        <div class="mb-3">
-            <strong>Właściciel (email):</strong> {{ book.user ? book.user.email : '—' }}
+        <div class="mb-8">
+            <span class="font-semibold">Właściciel (email):</span> {{ book.user ? book.user.email : '—' }}
         </div>
 
-        <a href="{{ path('home') }}" class="btn btn-secondary">Powrót do listy książek</a>
-{#        {% if is_granted('ROLE_USER') %}#}
-{#            <a href="{{ path('book_edit', {id: book.id}) }}" class="btn btn-primary">Edytuj książkę</a>#}
-{#            <form action="{{ path('book_delete', {id: book.id}) }}" method="post" class="d-inline">#}
-{#                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">#}
-{#                <button type="submit" class="btn btn-danger">Usuń książkę</button>#}
-{#            </form>#}
-{#        {% endif %}#}
+        <a href="{{ path('home') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">Powrót do listy książek</a>
+        {#        {% if is_granted('ROLE_USER') %}#}
+        {#            <a href="{{ path('book_edit', {id: book.id}) }}" class="btn btn-primary">Edytuj książkę</a>#}
+        {#            <form action="{{ path('book_delete', {id: book.id}) }}" method="post" class="d-inline">#}
+        {#                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">#}
+        {#                <button type="submit" class="btn btn-danger">Usuń książkę</button>#}
+        {#            </form>#}
+        {#        {% endif %}#}
     </div>
 {% endblock %}
