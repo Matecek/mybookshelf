@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moje książki (demo){% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="h4 mb-3">Książki w bazie</h1>
+
+        {% if books is empty %}
+            <div class="alert alert-info">Brak danych w bazie.</div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                    <tr>
+                        <th>Tytuł</th>
+                        <th>Autor</th>
+                        <th>Status</th>
+                        <th>Ocena</th>
+                        <th>Dodano</th>
+                        <th>Właściciel (email)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for b in books %}
+                        <tr>
+                            <td>{{ b.title }}</td>
+                            <td>{{ b.author }}</td>
+                            <td>
+                                {% if b.status == 'planned' %}planowana
+                                {% elseif b.status == 'reading' %}czytana
+                                {% else %}przeczytana{% endif %}
+                            </td>
+                            <td>{{ b.rating is not null ? b.rating ~ '/10' : '—' }}</td>
+                            <td>{{ b.createdAt|date('Y-m-d H:i') }}</td>
+                            <td>{{ b.user ? b.user.email : '—' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
