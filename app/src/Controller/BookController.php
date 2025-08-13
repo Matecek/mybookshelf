@@ -19,8 +19,20 @@ class BookController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        return $this->render('homepage/index.html.twig', [
+        return $this->render('homepage/show.html.twig', [
             'books' => $data,
+        ]);
+    }
+
+    #[Route('/book/{id}', name: 'book_show', methods: ['GET'])]
+    public function show(int $id, BookRepository $books): Response
+    {
+        $book = $books->find($id);
+        if (!$book) {
+            throw $this->createNotFoundException('Book not found');
+        }
+        return $this->render('book/show.html.twig', [
+            'book' => $book,
         ]);
     }
 }

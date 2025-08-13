@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ book.title }} - szczegóły{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="h4 mb-3">{{ book.title }}</h1>
+
+        <div class="mb-3">
+            <strong>Autor:</strong> {{ book.author }}
+        </div>
+        <div class="mb-3">
+            <strong>Status:</strong>
+            {% if book.status == 'planned' %}planowana
+            {% elseif book.status == 'reading' %}czytana
+            {% else %}przeczytana{% endif %}
+        </div>
+        <div class="mb-3">
+            <strong>Ocena:</strong> {{ book.rating is not null ? book.rating ~ '/10' : '—' }}
+        </div>
+        <div class="mb-3">
+            <strong>Dodano:</strong> {{ book.createdAt|date('Y-m-d H:i') }}
+        </div>
+        <div class="mb-3">
+            <strong>Właściciel (email):</strong> {{ book.user ? book.user.email : '—' }}
+        </div>
+
+        <a href="{{ path('book_index') }}" class="btn btn-secondary">Powrót do listy książek</a>
+{#        {% if is_granted('ROLE_USER') %}#}
+{#            <a href="{{ path('book_edit', {id: book.id}) }}" class="btn btn-primary">Edytuj książkę</a>#}
+{#            <form action="{{ path('book_delete', {id: book.id}) }}" method="post" class="d-inline">#}
+{#                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">#}
+{#                <button type="submit" class="btn btn-danger">Usuń książkę</button>#}
+{#            </form>#}
+{#        {% endif %}#}
+    </div>
+{% endblock %}

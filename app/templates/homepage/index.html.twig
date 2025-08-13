@@ -24,7 +24,11 @@
                     <tbody>
                     {% for b in books %}
                         <tr>
-                            <td>{{ b.title }}</td>
+                            <td>
+                                <a href="{{ path('book_show', {id: b.id}) }}" class="text-indigo-600 hover:underline">
+                                    {{ b.title }}
+                                </a>
+                            </td>
                             <td>{{ b.author }}</td>
                             <td>
                                 {% if b.status == 'planned' %}planowana

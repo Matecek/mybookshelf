@@ -11,7 +11,7 @@ final class DbCheckController extends AbstractController
     #[Route('/db/check', name: 'app_db_check')]
     public function index(): Response
     {
-        return $this->render('db_check/index.html.twig', [
+        return $this->render('db_check/show.html.twig', [
             'controller_name' => 'DbCheckController',
         ]);
     }
