@@ -26,12 +26,34 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/book/{id}', name: 'book_show', methods: ['GET'])]
-    public function show(int $id, BookRepository $books): Response
+    #[Route('/book/{id}', name: 'book_show', methods: ['GET', 'POST'])]
+    public function show(int $id, BookRepository $books, Request $request, EntityManagerInterface $em): Response
     {
         $book = $books->find($id);
         if (!$book) {
             throw $this->createNotFoundException('Book not found');
+        }
+        if ($request->isMethod('POST')) {
+            $rating = (int) $request->request->get('rating', 0);
+            $status = (string) $request->request->get('status', 'reading');
+
+            if ($rating !== null) {
+                if ($rating < 1 || $rating > 5) {
+                    $this->addFlash('danger', 'Ocena musi być w zakresie 1–5.');
+                    return $this->redirectToRoute('book_show', ['id' => $id]);
+                }
+                $book->setRating($rating);
+            }
+
+            $allowedStatuses = ['planned', 'reading', 'read'];
+            if ($status !== null && in_array($status, $allowedStatuses, true)) {
+                $book->setStatus($status);
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'Książka została zaktualizowana.');
+
+            return $this->redirectToRoute('book_show', ['id' => $id]);
         }
         return $this->render('book/show.html.twig', [
             'book' => $book,

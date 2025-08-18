@@ -26,16 +26,6 @@
             </div>
 
             <div>
-                <label for="status" class="block text-sm font-medium text-zinc-800 mb-1">Status</label>
-                <select id="status" name="status"
-                        class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
-                    <option value="planned" {% if book.status == 'planned' %}selected{% endif %}>Planowana</option>
-                    <option value="reading" {% if book.status == 'reading' %}selected{% endif %}>Czytana</option>
-                    <option value="read" {% if book.status == 'read' %}selected{% endif %}>Przeczytana</option>
-                </select>
-            </div>
-
-            <div>
                 <button type="submit"
                         class="inline-block rounded-xl border border-zinc-300 bg-sky-500 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-50 hover:text-black active:translate-y-px focus:outline-none focus:ring-4 focus:ring-zinc-200 cursor-pointer">
                     Zapisz zmiany

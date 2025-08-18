@@ -19,19 +19,28 @@
                 </p>
             </div>
 
-            <div class="mb-4">
-                <span class="font-medium text-zinc-800">Status:</span>
-                <span class="ml-1 text-zinc-700">
-        {% if book.status == 'planned' %}Planowana
-        {% elseif book.status == 'reading' %}Czytana
-        {% else %}Przeczytana{% endif %}
-      </span>
-            </div>
+            <form method="post" action="{{ path('book_show', { id: book.id }) }}" class="mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-zinc-800 mb-1">Status</label>
+                        <select name="status"
+                                onchange="this.form.requestSubmit()"
+                                class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
+                            <option value="planned"  {{ book.status == 'planned'  ? 'selected' : '' }}>Planowana</option>
+                            <option value="reading"  {{ book.status == 'reading'  ? 'selected' : '' }}>Czytana</option>
+                            <option value="read"     {{ book.status == 'read'     ? 'selected' : '' }}>Przeczytana</option>
+                        </select>
+                    </div>
 
-            <div class="mb-4">
-                <span class="font-medium text-zinc-800">Ocena:</span>
-                <span class="ml-1 text-zinc-700">{{ book.rating is not null ? book.rating ~ '/10' : '—' }}</span>
-            </div>
+                    <div>
+                        <label class="block font-medium text-zinc-800 mb-1">Ocena (1–10)</label>
+                        <input type="number" name="rating" min="1" max="10"
+                               value="{{ book.rating is not null ? book.rating : '' }}"
+                               onchange="this.form.requestSubmit()"
+                               class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
+                    </div>
+                </div>
+            </form>
 
             <div class="mb-4">
                 <span class="font-medium text-zinc-800">Dodano:</span>
@@ -62,4 +71,23 @@
             {#        {% endif %}#}
         </div>
     </div>
+{#    <script>#}
+{#        function toggleEdit(key, toEdit = true) {#}
+{#            const view = document.querySelector('[data-view="'+key+'"]');#}
+{#            const edit = document.querySelector('[data-edit="'+key+'"]');#}
+{#            if (!view || !edit) return;#}
+{#            if (toEdit) {#}
+{#                view.classList.add('hidden');#}
+{#                edit.classList.remove('hidden', 'flex');#}
+{#                edit.classList.add('flex');#}
+{#                const input = edit.querySelector('select, input');#}
+{#                if (input) input.focus();#}
+{#            } else {#}
+{#                edit.classList.add('hidden');#}
+{#                view.classList.remove('hidden');#}
+{#            }#}
+{#        }#}
+{#    </script>#}
 {% endblock %}
+
+
