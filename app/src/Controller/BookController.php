@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class BookController extends AbstractController
 {
@@ -33,6 +34,10 @@ class BookController extends AbstractController
         if (!$book) {
             throw $this->createNotFoundException('Book not found');
         }
+
+        $currentUser = $this->getUser();
+        $isOwner = $currentUser && $book->getUser() === $currentUser;
+
         if ($request->isMethod('POST')) {
             $rating = (int) $request->request->get('rating', 0);
             $status = (string) $request->request->get('status', 'reading');
@@ -62,16 +67,25 @@ class BookController extends AbstractController
         }
         return $this->render('book/show.html.twig', [
             'book' => $book,
+            'isOwner' => $isOwner,
         ]);
     }
 
     #[Route('/book/{id}/edit', name: 'book_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function edit(int $id, BookRepository $books, Request $request, EntityManagerInterface $em): Response
     {
         $book = $books->find($id);
         if (!$book) {
             throw $this->createNotFoundException('Book not found');
         }
+
+        $currentUser = $this->getUser();
+        if(!$currentUser || $book->getUser() !== $currentUser){
+            $this->addFlash('danger', 'Nie masz uprawnień do edycji tej książki.');
+            return $this->redirectToRoute('book_show', ['id' => $id]);
+        }
+
         if ($request->isMethod('POST')) {
             $title       = (string) $request->request->get('title', '');
             $author      = (string) $request->request->get('author', '');

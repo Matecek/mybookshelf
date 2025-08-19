@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Logowanie{% endblock %}
+
+{% block body %}
+    <div class="max-w-md mx-auto mt-10 px-4">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <h1 class="text-2xl font-semibold tracking-tight text-zinc-900 mb-6 text-center">Logowanie</h1>
+
+            {% if error %}
+                <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+                    <div class="text-red-700 text-sm">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                </div>
+            {% endif %}
+
+            <form method="post" action="{{ path('app_login') }}">
+                <div class="mb-4">
+                    <label for="email" class="block font-medium text-zinc-800 mb-1">Email</label>
+                    <input type="email"
+                           value="{{ last_username }}"
+                           name="email"
+                           id="email"
+                           class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+                           autocomplete="email"
+                           required
+                           autofocus>
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="block font-medium text-zinc-800 mb-1">Hasło</label>
+                    <input type="password"
+                           name="password"
+                           id="password"
+                           class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+                           autocomplete="current-password"
+                           required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="w-full rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 active:translate-y-px focus:outline-none focus:ring-4 focus:ring-sky-200"
+                        type="submit">
+                    Zaloguj się
+                </button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('home') }}" class="text-sm text-sky-600 hover:text-sky-800">
+                    Powrót na stronę główną
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
