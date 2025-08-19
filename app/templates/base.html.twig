@@ -23,6 +23,10 @@
         <div class="flex items-center gap-4">
             {% if app.user %}
                 <span class="text-gray-700">Zalogowany jako: {{ app.user.email }}</span>
+                <a href="{{ path('app_profile') }}"
+                   class="rounded-lg bg-sky-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-sky-600 transition">
+                    Mój profil
+                </a>
                 <a href="{{ path('app_logout') }}"
                    class="rounded-lg bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 transition">
                     Wyloguj

@@ -12,21 +12,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class BookController extends AbstractController
 {
-    #[Route('/', name: 'home', methods: ['GET'])]
-    public function index(BookRepository $books): Response
-    {
-        $data = $books->createQueryBuilder('b')
-            ->leftJoin('b.user', 'u')
-            ->addSelect('u')
-            ->orderBy('b.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        return $this->render('homepage/index.html.twig', [
-            'books' => $data,
-        ]);
-    }
-
     #[Route('/book/{id}', name: 'book_show', methods: ['GET', 'POST'])]
     public function show(int $id, BookRepository $books, Request $request, EntityManagerInterface $em): Response
     {
@@ -105,7 +90,7 @@ class BookController extends AbstractController
 
             $em->flush();
 
-            return $this->redirectToRoute('book_show', ['id' => $id]);
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('book/edit.html.twig', [

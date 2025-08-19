@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moje książki{% endblock %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto mt-10 px-4">
+        <h1 class="text-3xl font-semibold tracking-tight text-zinc-900 mb-8">Moje książki</h1>
+
+        {% if books is empty %}
+            <div class="text-center py-12">
+                <p class="text-zinc-600 text-lg">Nie masz jeszcze żadnych książek.</p>
+                <a href="{{ path('home') }}" class="inline-block mt-4 rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600">
+                    Dodaj pierwszą książkę
+                </a>
+            </div>
+        {% else %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for book in books %}
+                    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+                        <h2 class="text-xl font-semibold text-zinc-900 mb-2">{{ book.title }}</h2>
+                        <p class="text-zinc-600 mb-4">{{ book.author ?? 'Nieznany autor' }}</p>
+
+                        <div class="flex gap-2">
+                            <a href="{{ path('book_edit', {id: book.id}) }}"
+                               class="flex-1 text-center rounded-xl bg-sky-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600">
+                                Edytuj
+                            </a>
+                            <a href="{{ path('book_edit', {id: book.id}) }}"
+                               class="flex-1 text-center rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600">
+                                Usuń
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

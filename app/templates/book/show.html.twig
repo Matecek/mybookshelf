@@ -68,13 +68,6 @@
                     Powrót do listy książek
                 </a>
             </div>
-{#                    {% if is_granted('ROLE_USER') %}#}
-{#                        <a href="{{ path('book_edit', {id: book.id}) }}" class="btn btn-primary">Edytuj książkę</a>#}
-{#                        <form action="{{ path('book_delete', {id: book.id}) }}" method="post" class="d-inline">#}
-{#                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">#}
-{#                            <button type="submit" class="btn btn-danger">Usuń książkę</button>#}
-{#                        </form>#}
-{#                    {% endif %}#}
         </div>
     </div>
 <script>
