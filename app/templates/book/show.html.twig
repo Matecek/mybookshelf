@@ -23,21 +23,25 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-medium text-zinc-800 mb-1">Status</label>
-                        <select name="status"
-                                onchange="this.form.requestSubmit()"
-                                class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
-                            <option value="planned"  {{ book.status == 'planned'  ? 'selected' : '' }}>Planowana</option>
-                            <option value="reading"  {{ book.status == 'reading'  ? 'selected' : '' }}>Czytana</option>
-                            <option value="read"     {{ book.status == 'read'     ? 'selected' : '' }}>Przeczytana</option>
-                        </select>
+                        <label>
+                            <select name="status"
+                                    onchange="this.form.requestSubmit()"
+                                    class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
+                                <option value="planned"  {{ book.status == 'planned'  ? 'selected' : '' }}>Planowana</option>
+                                <option value="reading"  {{ book.status == 'reading'  ? 'selected' : '' }}>Czytana</option>
+                                <option value="finished"     {{ book.status == 'finished'     ? 'selected' : '' }}>Przeczytana</option>
+                            </select>
+                        </label>
                     </div>
 
                     <div>
                         <label class="block font-medium text-zinc-800 mb-1">Ocena (1–10)</label>
-                        <input type="number" name="rating" min="1" max="10"
-                               value="{{ book.rating is not null ? book.rating : '' }}"
-                               onchange="this.form.requestSubmit()"
-                               class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
+                        <label>
+                            <input type="number" name="rating" min="1" max="10"
+                                   value="{{ book.rating is not null ? book.rating : '' }}"
+                                   onchange="this.form.requestSubmit()"
+                                   class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
+                        </label>
                     </div>
                 </div>
             </form>
@@ -71,23 +75,26 @@
             {#        {% endif %}#}
         </div>
     </div>
-{#    <script>#}
-{#        function toggleEdit(key, toEdit = true) {#}
-{#            const view = document.querySelector('[data-view="'+key+'"]');#}
-{#            const edit = document.querySelector('[data-edit="'+key+'"]');#}
-{#            if (!view || !edit) return;#}
-{#            if (toEdit) {#}
-{#                view.classList.add('hidden');#}
-{#                edit.classList.remove('hidden', 'flex');#}
-{#                edit.classList.add('flex');#}
-{#                const input = edit.querySelector('select, input');#}
-{#                if (input) input.focus();#}
-{#            } else {#}
-{#                edit.classList.add('hidden');#}
-{#                view.classList.remove('hidden');#}
-{#            }#}
-{#        }#}
-{#    </script>#}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.querySelector('select[name="status"]');
+        const ratingInput = document.querySelector('input[name="rating"]');
+
+        function updateRatingVisibility() {
+            if (statusSelect.value !== 'finished') {
+                ratingInput.disabled = true;
+                ratingInput.value = '';
+                ratingInput.placeholder = 'Ocena dostępna tylko dla przeczytanych książek';
+            } else {
+                ratingInput.disabled = false
+                ratingInput.placeholder = 'Wprowadź ocenę (1–10)';
+            }
+        }
+        statusSelect.addEventListener('change', updateRatingVisibility);
+        updateRatingVisibility();
+    });
+
+</script>
 {% endblock %}
 
 

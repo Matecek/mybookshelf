@@ -37,17 +37,22 @@ class BookController extends AbstractController
             $rating = (int) $request->request->get('rating', 0);
             $status = (string) $request->request->get('status', 'reading');
 
-            if ($rating !== null) {
-                if ($rating < 1 || $rating > 5) {
-                    $this->addFlash('danger', 'Ocena musi być w zakresie 1–5.');
-                    return $this->redirectToRoute('book_show', ['id' => $id]);
-                }
-                $book->setRating($rating);
-            }
-
-            $allowedStatuses = ['planned', 'reading', 'read'];
+            $allowedStatuses = ['planned', 'reading', 'finished'];
             if ($status !== null && in_array($status, $allowedStatuses, true)) {
                 $book->setStatus($status);
+            }
+
+            if ($book->getStatus() !== 'finished') {
+                $book->setRating(null);
+            } else {
+                // Tylko jeśli status to "finished" i podano ocenę
+                if ($rating > 0) {
+                    if ($rating < 1 || $rating > 10) {
+                        $this->addFlash('danger', 'Ocena musi być w zakresie 1–10.');
+                        return $this->redirectToRoute('book_show', ['id' => $id]);
+                    }
+                    $book->setRating($rating);
+                }
             }
 
             $em->flush();
