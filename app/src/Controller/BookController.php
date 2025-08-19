@@ -50,7 +50,6 @@ class BookController extends AbstractController
             if ($book->getStatus() !== 'finished') {
                 $book->setRating(null);
             } else {
-                // Tylko jeśli status to "finished" i podano ocenę
                 if ($rating > 0) {
                     if ($rating < 1 || $rating > 10) {
                         $this->addFlash('danger', 'Ocena musi być w zakresie 1–10.');
