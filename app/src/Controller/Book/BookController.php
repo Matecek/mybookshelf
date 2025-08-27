@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Book;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
