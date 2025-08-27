@@ -22,6 +22,8 @@ security:
                 default_target_path: home
                 username_parameter: email
                 password_parameter: password
+            custom_authenticators:
+                - App\Security\GoogleAuthenticator
             logout:
                 path: app_logout
                 target: home

@@ -130,6 +130,16 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/knpuniversity/oauth2-client-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/league/oauth2-client" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/league/oauth2-google" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/ralouphie/getallheaders" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

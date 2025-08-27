@@ -143,6 +143,16 @@
       <path value="$PROJECT_DIR$/app/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/app/vendor/sebastian/complexity" />
       <path value="$PROJECT_DIR$/app/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/app/vendor/knpuniversity/oauth2-client-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/app/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/app/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/app/vendor/league/oauth2-client" />
+      <path value="$PROJECT_DIR$/app/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/app/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/app/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/app/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/app/vendor/league/oauth2-google" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">

@@ -16,5 +16,12 @@ services:
     App\:
         resource: '../src/'
 
+    App\Security\GoogleAuthenticator:
+        arguments:
+            $clientRegistry: '@knpu.oauth2.registry'
+            $entityManager: '@doctrine.orm.entity_manager'
+            $router: '@router'
+            $userRepository: '@App\Repository\UserRepository'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
