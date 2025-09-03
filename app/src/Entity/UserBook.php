@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'user_book_unique', columns: ['user_id', 'book_id'])]
 class UserBook
 {
-    public const STATUS_PLANNED = 'planowana';
-    public const STATUS_READING = 'czytana';
-    public const STATUS_FINISHED = 'przeczytana';
+    public const STATUS_PLANNED = 'planned';
+    public const STATUS_READING = 'reading';
+    public const STATUS_FINISHED = 'finished';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

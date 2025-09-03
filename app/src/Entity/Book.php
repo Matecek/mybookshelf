@@ -37,6 +37,9 @@ class Book
     #[ORM\OneToMany(targetEntity: UserBook::class, mappedBy: 'book')]
     private Collection $userBooks;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $averageRating = null;
+
     public function __construct()
     {
         $this->userBooks = new ArrayCollection();
@@ -48,20 +51,16 @@ class Book
         return $this->userBooks;
     }
 
+    public function setAverageRating(?float $averageRating): self
+    {
+        $this->averageRating = $averageRating;
+        return $this;
+    }
+
+
     public function getAverageRating(): ?float
     {
-        $ratings = [];
-        foreach ($this->userBooks as $userBook) {
-            if ($userBook->getRating() !== null) {
-                $ratings[] = $userBook->getRating();
-            }
-        }
-
-        if (empty($ratings)) {
-            return null;
-        }
-
-        return round(array_sum($ratings) / count($ratings), 1);
+        return $this->averageRating;
     }
 
     public function getRatingsCount(): int

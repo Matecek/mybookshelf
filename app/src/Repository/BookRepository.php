@@ -21,7 +21,9 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->leftJoin('b.user', 'u')
+            ->leftJoin('b.userBooks', 'ub')
             ->addSelect('u')
+            ->addSelect('ub')
             ->orderBy('b.createdAt', 'DESC')
             ->getQuery()
             ->getResult();

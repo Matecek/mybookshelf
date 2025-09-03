@@ -50,6 +50,21 @@ class UpdateBookStatus
         }
 
         $this->em->persist($userBook);
+        $this->updateBookAverageRating($book);
         $this->em->flush();
+    }
+
+    private function updateBookAverageRating(Book $book): void
+    {
+        $ratings = [];
+        foreach ($book->getUserBooks() as $userBook) {
+            if ($userBook->getRating() !== null) {
+                $ratings[] = $userBook->getRating();
+            }
+        }
+
+        $averageRating = empty($ratings) ? null : round(array_sum($ratings) / count($ratings), 1);
+        $book->setAverageRating($averageRating);
+        $this->em->persist($book);
     }
 }
