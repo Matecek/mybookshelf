@@ -19,6 +19,8 @@
                 </p>
             </div>
 
+            {% set userStatus = book.getStatusForUser(app.user) %}
+            {% set userRating = book.getRatingForUser(app.user) %}
             <form method="post" action="{{ path('book_show', { id: book.id }) }}" class="mb-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -27,9 +29,9 @@
                             <select name="status"
                                     onchange="this.form.requestSubmit()"
                                     class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
-                                <option value="planned"  {{ book.status == 'planned'  ? 'selected' : '' }}>Planowana</option>
-                                <option value="reading"  {{ book.status == 'reading'  ? 'selected' : '' }}>Czytana</option>
-                                <option value="finished"     {{ book.status == 'finished'     ? 'selected' : '' }}>Przeczytana</option>
+                                <option value="planned" {{ userStatus == 'planned' or userStatus is null ? 'selected' : '' }}>Planowana</option>
+                                <option value="reading" {{ userStatus == 'reading' ? 'selected' : '' }}>Czytana</option>
+                                <option value="finished" {{ userStatus == 'finished' ? 'selected' : '' }}>Przeczytana</option>
                             </select>
                         </label>
                     </div>
@@ -38,7 +40,7 @@
                         <label class="block font-medium text-zinc-800 mb-1">Ocena (1–10)</label>
                         <label>
                             <input type="number" name="rating" min="1" max="10"
-                                   value="{{ book.rating is not null ? book.rating : '' }}"
+                                   value="{{ userRating is not null ? userRating : '' }}"
                                    onchange="this.form.requestSubmit()"
                                    class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-zinc-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100">
                         </label>

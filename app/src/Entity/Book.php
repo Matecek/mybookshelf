@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -23,12 +25,6 @@ class Book
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $status = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $rating = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $review = null;
 
@@ -37,6 +33,77 @@ class Book
 
     #[ORM\ManyToOne(inversedBy: 'books')]
     private ?User $user = null;
+
+    #[ORM\OneToMany(targetEntity: UserBook::class, mappedBy: 'book')]
+    private Collection $userBooks;
+
+    public function __construct()
+    {
+        $this->userBooks = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getUserBooks(): Collection
+    {
+        return $this->userBooks;
+    }
+
+    public function getAverageRating(): ?float
+    {
+        $ratings = [];
+        foreach ($this->userBooks as $userBook) {
+            if ($userBook->getRating() !== null) {
+                $ratings[] = $userBook->getRating();
+            }
+        }
+
+        if (empty($ratings)) {
+            return null;
+        }
+
+        return round(array_sum($ratings) / count($ratings), 1);
+    }
+
+    public function getRatingsCount(): int
+    {
+        $count = 0;
+        foreach ($this->userBooks as $userBook) {
+            if ($userBook->getRating() !== null) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+// Metoda do sprawdzania statusu dla konkretnego użytkownika
+    public function getStatusForUser(?User $user): ?string
+    {
+        if (!$user) {
+            return null;
+        }
+
+        foreach ($this->userBooks as $userBook) {
+            if ($userBook->getUser() === $user) {
+                return $userBook->getStatus();
+            }
+        }
+        return null;
+    }
+
+// Metoda do sprawdzania oceny dla konkretnego użytkownika
+    public function getRatingForUser(?User $user): ?int
+    {
+        if (!$user) {
+            return null;
+        }
+
+        foreach ($this->userBooks as $userBook) {
+            if ($userBook->getUser() === $user) {
+                return $userBook->getRating();
+            }
+        }
+        return null;
+    }
 
     public function getId(): ?int
     {
@@ -79,29 +146,6 @@ class Book
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getRating(): ?int
-    {
-        return $this->rating;
-    }
-
-    public function setRating(?int $rating): static
-    {
-        $this->rating = $rating;
-
-        return $this;
-    }
 
     public function getReview(): ?string
     {

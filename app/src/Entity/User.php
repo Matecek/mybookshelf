@@ -42,9 +42,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\OneToMany(targetEntity: UserBook::class, mappedBy: 'user', cascade: ['remove'])]
+    private Collection $userBooks;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
+        $this->userBooks = new ArrayCollection();
+    }
+
+    public function getUserBooks(): Collection
+    {
+        return $this->userBooks;
+    }
+
+    public function addUserBook(UserBook $userBook): self
+    {
+        if (!$this->userBooks->contains($userBook)) {
+            $this->userBooks->add($userBook);
+            $userBook->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeUserBook(UserBook $userBook): self
+    {
+        if ($this->userBooks->removeElement($userBook)) {
+            if ($userBook->getUser() === $this) {
+                $userBook->setUser(null);
+            }
+        }
+        return $this;
     }
 
     public function getName(): ?string

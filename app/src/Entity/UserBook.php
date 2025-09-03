@@ -13,9 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class UserBook
 {
     public const STATUS_PLANNED = 'planowana';
-    public const STATUS_READING = 'czytam';
+    public const STATUS_READING = 'czytana';
     public const STATUS_FINISHED = 'przeczytana';
-    public const STATUS_ABANDONED = 'porzucona';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,12 +38,33 @@ class UserBook
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTime $updatedAt = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $rating = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
     }
 
     // Getters and setters
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): self
+    {
+        // Rating tylko dla przeczytanych książek
+        if ($this->status === self::STATUS_FINISHED && $rating >= 1 && $rating <= 10) {
+            $this->rating = $rating;
+        } elseif ($this->status !== self::STATUS_FINISHED) {
+            $this->rating = null;
+        }
+
+        $this->updatedAt = new \DateTime();
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,9 +118,8 @@ class UserBook
     {
         return [
             self::STATUS_PLANNED => 'Planowana',
-            self::STATUS_READING => 'Czytam',
+            self::STATUS_READING => 'Czytana',
             self::STATUS_FINISHED => 'Przeczytana',
-            self::STATUS_ABANDONED => 'Porzucona',
         ];
     }
 }
