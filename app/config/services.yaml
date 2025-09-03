@@ -23,5 +23,9 @@ services:
             $router: '@router'
             $userRepository: '@App\Repository\UserRepository'
 
+    App\EventListener\SessionTimeoutListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 7 }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

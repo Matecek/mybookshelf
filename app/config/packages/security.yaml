@@ -27,11 +27,15 @@ security:
             logout:
                 path: app_logout
                 target: home
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 3600
+                path: /
+            entry_point: form_login
 
     access_control:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
-
 when@test:
     security:
         password_hashers:
