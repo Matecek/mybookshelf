@@ -4,6 +4,8 @@ FROM php:8.3-fpm
 RUN apt-get update && apt-get install -y \
     git unzip curl zip libicu-dev \
     && docker-php-ext-install intl pdo pdo_mysql \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
     && rm -rf /var/lib/apt/lists/*
 
 # Composer

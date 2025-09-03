@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller\Book;
 
 use App\Repository\BookRepository;
+use App\Services\Book\EditBook;
+use App\Services\Book\UpdateBookStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,52 +15,33 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class BookController extends AbstractController
 {
+    public function __construct(private UpdateBookStatus $UpdateBookStatus){}
+
     #[Route('/book/{id}', name: 'book_show', methods: ['GET', 'POST'])]
-    public function show(int $id, BookRepository $books, Request $request, EntityManagerInterface $em): Response
+    public function show(int $id, BookRepository $books, Request $request): Response
     {
         $book = $books->find($id);
         if (!$book) {
             throw $this->createNotFoundException('Book not found');
         }
 
-        $currentUser = $this->getUser();
-        $isOwner = $currentUser && $book->getUser() === $currentUser;
-
         if ($request->isMethod('POST')) {
-            $rating = (int) $request->request->get('rating', 0);
-            $status = (string) $request->request->get('status', 'reading');
-
-            $allowedStatuses = ['planned', 'reading', 'finished'];
-            if ($status !== null && in_array($status, $allowedStatuses, true)) {
-                $book->setStatus($status);
-            }
-
-            if ($book->getStatus() !== 'finished') {
-                $book->setRating(null);
-            } else {
-                if ($rating > 0) {
-                    if ($rating < 1 || $rating > 10) {
-                        $this->addFlash('danger', 'Ocena musi być w zakresie 1–10.');
-                        return $this->redirectToRoute('book_show', ['id' => $id]);
-                    }
-                    $book->setRating($rating);
-                }
-            }
-
-            $em->flush();
+            $this->UpdateBookStatus->updateBookSatusAndRating($book, $request);
             $this->addFlash('success', 'Książka została zaktualizowana.');
 
             return $this->redirectToRoute('book_show', ['id' => $id]);
+
         }
+
         return $this->render('book/show.html.twig', [
             'book' => $book,
-            'isOwner' => $isOwner,
+            'isOwner' => $this->getUser() && $book->getUser() === $this->getUser(),
         ]);
     }
 
     #[Route('/book/{id}/edit', name: 'book_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function edit(int $id, BookRepository $books, Request $request, EntityManagerInterface $em): Response
+    public function edit(int $id, BookRepository $books, Request $request, EditBook $editBook): Response
     {
         $book = $books->find($id);
         if (!$book) {
@@ -71,28 +55,13 @@ class BookController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $title       = (string) $request->request->get('title', '');
-            $author      = (string) $request->request->get('author', '');
-            $description = $request->request->get('description') ?: null;
-            $status      = (string) $request->request->get('status', 'reading');
-
-            if ($title === '' || $author === '') {
-                $this->addFlash('danger', 'Tytuł i autor są wymagane.');
-                return $this->render('book/edit.html.twig', ['book' => $book]);
+            try {
+                $editBook->editBook($book, $request);
+                return $this->redirectToRoute('app_profile');
+            } catch (\InvalidArgumentException $e) {
+                $this->addFlash('danger', $e->getMessage());
             }
-
-            $book->setTitle($title);
-            $book->setAuthor($author);
-            if (method_exists($book, 'setDescription')) {
-                $book->setDescription($description);
-            }
-            $book->setStatus($status);
-
-            $em->flush();
-
-            return $this->redirectToRoute('app_profile');
         }
-
         return $this->render('book/edit.html.twig', [
             'book' => $book,
         ]);
